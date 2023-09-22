@@ -1,0 +1,13 @@
+version: v1
+
+lint:
+  use:
+    - DEFAULT
+  except:
+    - ENUM_VALUE_PREFIX
+
+breaking:
+  ignore_unstable_packages: true
+
+deps:
+  - buf.build/googleapis/googleapis:28151c0d0a1641bf938a7672c500e01d
