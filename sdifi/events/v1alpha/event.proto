@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+// The sdifi.events.v1alpha package contains common message types used by the
+// SDiFI project (e.g. the components of Masdif) in event streams.
+package sdifi.events.v1alpha;
+
+import "google/protobuf/timestamp.proto";
+import "sdifi/speech/v1alpha/speech.proto";
+
+// XADD <conversation_id>/<event_type>
+
+
+message Conversation {
+  string name = 1;
+}
+
+message Metadata {
+  Conversation conversation = 1;
+  google.protobuf.Timestamp created_at = 2;
+  map<string, string> labels = 3;
+}
+
+message Event {
+  Metadata metadata = 1;
+
+  oneof payload {
+    SpeechFinalEvent speech_final = 2;
+    SpeechPartialEvent speech_partial = 3;
+    SpeechContentEvent speech_content = 4;
+  }
+}
+
+message SpeechFinalEvent {
+  string transcript = 1;
+}
+
+message SpeechPartialEvent {
+  oneof content {
+    string transcript = 1;
+    sdifi.speech.v1alpha.StreamingRecognizeResponse.SpeechEventType speech_event_type = 2;
+  }
+}
+
+message SpeechContentEvent {
+  message Info {
+    sdifi.speech.v1alpha.RecognitionConfig.AudioEncoding encoding = 1;
+    int32 sample_rate_hertz = 2;
+  }
+
+  // Incoming chunks of audio. In the case of
+  bytes content = 1;
+
+  // Metadata for audio chunk in `content`, i.e. sample rate, encoding, etc.
+  Info info = 2;
+}
