@@ -60,6 +60,9 @@ message StreamingRecognitionConfig {
   // the `is_final=false` flag).
   // If `false` or omitted, only `is_final=true` result(s) are returned.
   bool interim_results = 3;
+
+  // Identifier for which conversation this speech stream belongs to
+  string conversation = 4;
 }
 
 // Provides information to the recognizer that specifies how to process the
