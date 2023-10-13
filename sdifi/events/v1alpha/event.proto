@@ -7,9 +7,6 @@ package sdifi.events.v1alpha;
 import "google/protobuf/timestamp.proto";
 import "sdifi/speech/v1alpha/speech.proto";
 
-// XADD <conversation_id>/<event_type>
-
-
 message Conversation {
   string name = 1;
 }
