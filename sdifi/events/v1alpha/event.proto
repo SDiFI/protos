@@ -5,6 +5,7 @@ syntax = "proto3";
 package sdifi.events.v1alpha;
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
 import "sdifi/speech/v1alpha/speech.proto";
 
 message Conversation {
@@ -49,4 +50,29 @@ message SpeechContentEvent {
 
   // Metadata for audio chunk in `content`, i.e. sample rate, encoding, etc.
   Info info = 2;
+}
+
+service EventService {
+  rpc Watch(WatchRequest) returns (stream WatchResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha/events:watch"
+    };
+  };
+}
+
+
+message WatchRequest {
+  string conversation_id = 1;
+
+  // *Optional* Events to listen for
+  //
+  // If specified the service will only return events of these types. Each type
+  // must be either the fully qualified name of the event or the name without
+  // the package prefix. The available types are the *Event messages specified
+  // above, e.g. SpeechFinalEvent and SpeechPartialEvent.
+  repeated string watch_event_type = 2;
+}
+
+message WatchResponse {
+  Event event = 1;
 }
